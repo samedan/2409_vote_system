@@ -33,3 +33,9 @@
 > format('M d, Y'); display date & time
 
 ## UpdatePollRequest -> check to see if user created the poll
+
+### Check to see if Polls are ready to start
+
+> php artisan make:command StartPendingPolls -> /app/Console/Commands/StartPendingPolls.php
+> handle() in StartPendingPolls, schedule() in Kernel.php
+> Run command: /localURL/.config\herd\bin\php81\php.exe php artisan schedule:run
