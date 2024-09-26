@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PollController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -35,8 +36,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// POLLS
 Route::prefix('poll')->middleware('auth')->group(function() {
     Route::view('create', 'polls.create');
+    Route::post('create', [PollController::class, 'store'])->name('poll.store');
+    Route::get('/', [PollController::class, 'index'])->name('poll.index');
+    Route::get('/update/{poll}', [PollController::class, 'edit'])->name('poll.edit');
+    Route::put('/update/{poll}', [PollController::class,'update'])->name('poll.update');
 });
 
 require __DIR__.'/auth.php';

@@ -18,7 +18,8 @@ return new class extends Migration
             $table->foreignId('created_by')->constrained('users', 'id');
             $table->dateTime('start_at'); // 2022-12-31 15:00
             $table->dateTime('end_at'); // 2022-12-31 15:00
-            $table->enum('status', array_column(PollStatus::cases(), 'value')); 
+            // $table->enum('status', array_column(PollStatus::cases(), 'value')); 
+            $table->enum('status', array_column(PollStatus::cases(), 'value'))->default(PollStatus::PENDING->value); 
             $table->timestamps();
         });
     }

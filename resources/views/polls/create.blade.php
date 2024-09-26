@@ -5,9 +5,8 @@
     <div class="row">
         <h2 class="center">New Poll</h2>
         <form class="col s12" method="post" 
-        {{-- action="{{route('poll.store')}}" --}}
+            action="{{route('poll.store')}}"
         >
-
         @csrf
         <div class="row">
         </div>
