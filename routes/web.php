@@ -38,11 +38,12 @@ Route::middleware('auth')->group(function () {
 
 // POLLS
 Route::prefix('poll')->middleware('auth')->group(function() {
-    Route::view('create', 'polls.create');
+    Route::view('create', 'polls.create')->name('poll.create');
     Route::post('create', [PollController::class, 'store'])->name('poll.store');
     Route::get('/', [PollController::class, 'index'])->name('poll.index');
     Route::get('/update/{poll}', [PollController::class, 'edit'])->name('poll.edit');
     Route::put('/update/{poll}', [PollController::class,'update'])->name('poll.update');
+    Route::get('delete/{poll}', [PollController::class, 'delete'])->name('poll.delete');
 });
 
 require __DIR__.'/auth.php';

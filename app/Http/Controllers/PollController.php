@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PollStatus;
 use App\Http\Requests\CreatePollRequest;
 use App\Http\Requests\UpdatePollRequest;
 use App\Models\Poll;
@@ -51,6 +52,16 @@ class PollController extends Controller
         // return options as array of array
         $poll->options()->createMany($request->options);
         return to_route('poll.index'); // = response()->route('poll.index)
+    }
+
+    // DELETE Poll
+    public function delete(Poll $poll) {
+        if($poll->status === PollStatus::PENDING->value) {
+            abort(404, 'No pending poll');
+        } 
+        $poll->options()->delete();
+        $poll->delete();
+        return back();
     }
 
 

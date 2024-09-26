@@ -7,7 +7,7 @@
         </h1>
         <div class="row">
             <a class="waves-effect waves-light btn info darken-2" 
-            {{-- href="{{route('poll.create')}}" --}}
+            href="{{route('poll.create')}}"
             >
             new poll &plus;
             </a>
@@ -31,11 +31,11 @@
                     update
                     </a>
 
-                    {{-- <a class="waves-effect waves-light btn red darken-2" href="{{route('poll.delete',[$poll])}}">
+                    <a class="waves-effect waves-light btn red darken-2" href="{{route('poll.delete',[$poll])}}">
                     delete
                     </a>
 
-                    <a class="waves-effect waves-light btn green lighten-0" href="{{route('poll.show',[$poll])}}">
+                    {{-- <a class="waves-effect waves-light btn green lighten-0" href="{{route('poll.show',[$poll])}}">
                     show
                     </a> --}}
                 </td>
