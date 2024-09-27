@@ -44,4 +44,14 @@ class Poll extends Model
         // return Carbon::parse($this->end_at)->toTimeString();
         return $this->end_at->format('h:i A');;
     }
+
+    // return nr of days for show.blade.php
+    public function getEndDateFormatAttribute() {
+        return $this->end_at->diffForHumans();
+    }
+
+    // returns all votes
+    public function votes(){
+        return $this->hasMany(Vote::class);
+    }
 }

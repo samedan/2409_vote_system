@@ -44,6 +44,9 @@ Route::prefix('poll')->middleware('auth')->group(function() {
     Route::get('/update/{poll}', [PollController::class, 'edit'])->name('poll.edit');
     Route::put('/update/{poll}', [PollController::class,'update'])->name('poll.update');
     Route::get('delete/{poll}', [PollController::class, 'delete'])->name('poll.delete');
+
+    Route::get('/{poll}', [PollController::class, 'show'])->name('poll.show');
+    Route::post('/{poll}/vote', [PollController::class, 'vote'])->name('poll.vote');
 });
 
 require __DIR__.'/auth.php';

@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Enums\PollStatus;
 use App\Http\Requests\CreatePollRequest;
 use App\Http\Requests\UpdatePollRequest;
+use App\Http\Requests\VoteRequest;
+use App\Models\Option;
 use App\Models\Poll;
+use App\Models\Vote;
 use Illuminate\Http\Request;
 
 class PollController extends Controller
@@ -65,6 +68,35 @@ class PollController extends Controller
     }
 
 
+    // Show Poll Votes (Options)
+    public function show(Poll $poll)
+     {
+        $poll = $poll->load('options');
+        $selectedOption = $poll->votes()->where('user_id', auth()->id())->first()?->option_id;
+        // dd($selectedOption);
+        if($poll->user->is(auth()->user())) {            
+                return view('polls.show', compact('poll', 'selectedOption'));
+        }      
+        abort_if($poll->status != PollStatus::STARTED->value, 404);
+       
+        return view('polls.show', compact('poll', 'selectedOption'));
+        
+      }
+
+      public function vote(VoteRequest $request, Poll $poll) {
+        $selectedOption = $poll->votes()->where('user_id', auth()->id())->first()?->option;
+        $poll->votes()->updateOrCreate(
+            ['user_id'=>auth()->id()],
+            ['option_id'=>$request->option_id]
+        );
+        Option::find($request->option_id)->increment('votes_count');
+
+        if($selectedOption) {
+            $selectedOption->decrement('votes_count');
+        }
+
+        return back();
+      }
 
 
 }

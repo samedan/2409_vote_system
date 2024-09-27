@@ -35,9 +35,9 @@
                     delete
                     </a>
 
-                    {{-- <a class="waves-effect waves-light btn green lighten-0" href="{{route('poll.show',[$poll])}}">
+                    <a class="waves-effect waves-light btn green lighten-0" href="{{route('poll.show',[$poll])}}">
                     show
-                    </a> --}}
+                    </a>
                 </td>
               </tr>
 
