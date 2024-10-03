@@ -34,7 +34,7 @@
 
 ## UpdatePollRequest -> check to see if user created the poll
 
-### Check to see if Polls are ready to start
+### COMMAND CRON ScheduledTask - Check to see if Polls are ready to start
 
 > php artisan make:command StartPendingPolls -> /app/Console/Commands/StartPendingPolls.php
 > handle() in StartPendingPolls, schedule() in Kernel.php
@@ -54,3 +54,10 @@
 
 > PollController show() : load selectedOption if already voted in
 > PollController vote() : increase/decrease 'votes_count' in 'options' table
+
+### COMMAND CRON ScheduledTask - Check to see if Polls are ended
+
+> php artisan make:command EndPolls
+> EndPolls.php -> $signature = 'poll:end' -> handle(condition)
+> /app/console/Kernel.php -> command 'poll:end' in schedule()
+> Command : php artisan schedule:run

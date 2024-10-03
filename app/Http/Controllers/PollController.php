@@ -10,6 +10,7 @@ use App\Models\Option;
 use App\Models\Poll;
 use App\Models\Vote;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PollController extends Controller
 {
@@ -18,12 +19,13 @@ class PollController extends Controller
     public function store(CreatePollRequest $request) {
         $poll = auth()->user()->polls()->create($request->safe()->except('options'));
 
-        // dd($request->options);
+        dd($request->options);
         // array:2 [▼ // app\Http\Controllers\PollController.php:14
         //     0 => array:1 [▼
         //         "content" => "red"             ]
         //     1 => array:1 [▶]
         //     ]
+        // dd($poll);
         $poll->options()->createMany(
             $request->options           
         );
@@ -40,20 +42,58 @@ class PollController extends Controller
         return  view('polls.list', compact('polls'));
     }
 
+    // Incognito GET all Polls
+    public function indexIncognito() {
+        // $polls = auth()->user()->polls()->select('title', 'status', 'id')->paginate(10);
+        $polls = Poll::where( 'status','STARTED')->with('options')->get();
+        // $polls = Poll::with('options')->where( 'status','STARTED')->select('title', 'status', 'id', 'options')->get();
+        // $polls = Poll::with('options')->get();
+        // if($poll->status === PollStatus::PENDING->value)
+        // dd($polls);
+        // 'compact' Creates an array containing variables and their values.
+        // return  view('polls.list-all-polls', compact('polls'));
+        return Inertia::render('ListAllPolls', ['polls'=> $polls]);
+    }
+
+    // Incognito GET Single Poll Incognito
+    public function IndexPollIncognito($id) {
+        
+        // $polls = auth()->user()->polls()->select('title', 'status', 'id')->paginate(10);
+        $pollToVoteOn = Poll::where( 'id',$id)->with('options')->get();
+        // $polls = Poll::with('options')->where( 'status','STARTED')->select('title', 'status', 'id', 'options')->get();
+        // $polls = Poll::with('options')->get();
+        // if($poll->status === PollStatus::PENDING->value)
+        // dd($polls);
+        // 'compact' Creates an array containing variables and their values.
+        // return  view('polls.list-all-polls', compact('polls'));
+
+        // dd($pollToVoteOn);
+        return Inertia::render('PollToVoteOn', ['poll'=> $pollToVoteOn]);
+    }
+
     // GET Post edit form filled
     public function edit(Poll $poll) {
-        $poll = $poll->load('options'); 
+        
         // dd($poll);
+        // abort_if(auth()->user()->isNot($poll->user), 403);
+        // abort_if($poll->status != PollStatus::STARTED->value, 404);
+        // abort_if($poll->status == PollStatus::PENDING->value, 404);
+        $poll = $poll->load('options'); 
+
+        
         return view("polls.update", compact('poll'));
     }
 
     // UPDATE PUT Poll
     public function update(UpdatePollRequest $request, Poll $poll) {
+        
         $data = $request->safe()->except('options');
+        dd($data);
         $poll->update($data);
         $poll->options()->delete();
         // return options as array of array
         $poll->options()->createMany($request->options);
+        dd($poll);
         return to_route('poll.index'); // = response()->route('poll.index)
     }
 
@@ -81,9 +121,11 @@ class PollController extends Controller
        
         return view('polls.show', compact('poll', 'selectedOption'));
         
+        
       }
 
       public function vote(VoteRequest $request, Poll $poll) {
+        abort_if($poll->status != PollStatus::STARTED->value, 404);
         $selectedOption = $poll->votes()->where('user_id', auth()->id())->first()?->option;
         $poll->votes()->updateOrCreate(
             ['user_id'=>auth()->id()],
@@ -96,6 +138,30 @@ class PollController extends Controller
         }
 
         return back();
+        
+      }
+
+      // Anybody votes
+      public function voteIncognito(Option $option, Poll $poll) {
+        // abort_if($poll->status != PollStatus::STARTED->value, 404);
+        // $selectedOption = $poll->votes()->where('user_id', auth()->id())->first()?->option;
+        
+        // dd($option, $poll);
+        $option_id = $option->id;
+        // $poll->votes()->updateOrCreate(
+        //     ['user_id'=>str()->random(5)],
+        //     ['option_id'=>$request->option_id]
+        // );
+        Option::find($option_id)->increment('votes_count');
+        // $polls = Poll::where( 'status','STARTED')->with('options')->get();
+        // if($selectedOption) {
+        //     $selectedOption->decrement('votes_count');
+        // }
+
+        return  response()
+        ->json(['option' => $option_id, 'votes_count' => Option::find($option_id)->votes_count]);
+        
+               
       }
 
 

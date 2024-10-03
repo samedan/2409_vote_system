@@ -29,12 +29,20 @@ export default function Authenticated({ user, header, children }) {
                                     Dashboard
                                 </NavLink>
                             </div>
-                            <div className="hidden_ space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
                                     href={route("poll.create")}
                                     active={route().current("poll.create")}
                                 >
-                                    Create Poll
+                                    Create Poll X
+                                </NavLink>
+                            </div>
+                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink
+                                    href={route("poll.index")}
+                                    active={route().current("poll.index")}
+                                >
+                                    See All Polls
                                 </NavLink>
                             </div>
                         </div>

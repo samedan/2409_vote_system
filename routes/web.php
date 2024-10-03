@@ -17,7 +17,7 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
+Route::get('/entry', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -26,15 +26,31 @@ Route::get('/', function () {
     ]);
 });
 
+// Incognito
+Route::get('/', [PollController::class, 'indexIncognito'])->name('poll.indexIncognito');
+// Route::get('/polls', [PollController::class, 'indexIncognito']);
+Route::post('/polls/{option}', [PollController::class, 'voteIncognito']);
+Route::get('/polls/{id}', [PollController::class, 'IndexPollIncognito']);
+Route::get('/chart',  function () {
+    return Inertia::render('Chart');
+});
+
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/showAllPolls', function () {
+//     return Inertia::render('ShowAllPolls');
+// })->middleware(['auth', 'verified'])->name('showAllPolls');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+
 
 // POLLS
 Route::prefix('poll')->middleware('auth')->group(function() {

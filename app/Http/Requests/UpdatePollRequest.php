@@ -13,12 +13,12 @@ class UpdatePollRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // return false;
+        return true;
         // check to see if user created the poll
-        return auth()->user()->is($this->poll->user) 
-         &&
-         $this->poll->status == PollStatus::PENDING->value
-         ;
+        // return auth()->user()->is($this->poll->user) 
+        //  &&
+        //  $this->poll->status == PollStatus::PENDING->value
+        //  ;
     }
 
     public function prepareForValidation()
