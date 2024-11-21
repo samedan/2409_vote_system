@@ -84,7 +84,7 @@ export default function Chart(votedData, totalReceived) {
                     // width: "100%",
                     // height: "100vh",
                     width: "450px",
-                    height: "142px",
+                    height: "242px",
                 }}
             >
                 <ResponsiveContainer>

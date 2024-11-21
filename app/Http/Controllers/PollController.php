@@ -9,6 +9,7 @@ use App\Http\Requests\VoteRequest;
 use App\Models\Option;
 use App\Models\Poll;
 use App\Models\Vote;
+use App\Models\Voter;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -142,16 +143,23 @@ class PollController extends Controller
       }
 
       // Anybody votes
-      public function voteIncognito(Option $option, Poll $poll) {
+    //   public function voteIncognito(Option $option, Poll $poll ) {
+      public function voteIncognito(Option $option,Request $request ) {
         // abort_if($poll->status != PollStatus::STARTED->value, 404);
         // $selectedOption = $poll->votes()->where('user_id', auth()->id())->first()?->option;
         
+        // dd($request[0]);
+        // dd($request[0]['voting_client']);
         // dd($option, $poll);
+        
         $option_id = $option->id;
         // $poll->votes()->updateOrCreate(
         //     ['user_id'=>str()->random(5)],
         //     ['option_id'=>$request->option_id]
         // );
+        $voter = new Voter([
+            'voting_client'=> $request[0]['voting_client']]);
+        $voter->save();
         Option::find($option_id)->increment('votes_count');
         // $polls = Poll::where( 'status','STARTED')->with('options')->get();
         // if($selectedOption) {
