@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import Chart from "./Chart";
-import ListAllPolls from "./ListAllPolls";
 
 // const sentData = [
 // {
@@ -50,7 +48,7 @@ const svgs = [
 // let sentData = [];
 
 export default function PollToVoteOn(props) {
-    const { poll, votingClient, votingDate } = props;
+    const { poll, votingClient, votingDate, setter } = props;
 
     // console.log(poll);
     // console.log(votingClient);
@@ -63,6 +61,9 @@ export default function PollToVoteOn(props) {
     const [votedOption, setVotedOption] = useState(null);
     const [totalSent, setTotalSent] = useState(0);
 
+    // setter("Data from Child");
+    const voteCount = 0;
+
     function vote(option_id, poll_id, option_name) {
         // console.log("option_id, poll_id");
 
@@ -70,6 +71,7 @@ export default function PollToVoteOn(props) {
         // console.log("option_name");
         // console.log(option_name);
         setVotedOption(option_name);
+        setter(option_id);
         //  async function fetchData() {
         //   try {
         //     const response = await fetch('https://api.example.com/data');

@@ -61,3 +61,10 @@
 > EndPolls.php -> $signature = 'poll:end' -> handle(condition)
 > /app/console/Kernel.php -> command 'poll:end' in schedule()
 > Command : php artisan schedule:run
+
+### Vote Pharmacy
+
+> ListAllPolls.jsx -> parent
+> PollToVoteOn.jsx -> child
+
+> Copy public 'build' folder in the backend folder
