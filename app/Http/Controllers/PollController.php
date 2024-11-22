@@ -150,16 +150,27 @@ class PollController extends Controller
         
         // dd($request[0]);
         // dd($request[0]['voting_client']);
-        // dd($option, $poll);
+        // dd($option);
         
         $option_id = $option->id;
         // $poll->votes()->updateOrCreate(
         //     ['user_id'=>str()->random(5)],
         //     ['option_id'=>$request->option_id]
         // );
+        
         $voter = new Voter([
-            'voting_client'=> $request[0]['voting_client']]);
+            'voting_client'=> $request[0]['voting_client'],
+            'voting_date'=> now()->format('Y-m-d H:i:s')
+        ]);
+        
         $voter->save();
+        $vote = new Vote([
+            'option_id' => $option->id,
+            'ip_address'=> $request[0]['voting_client'],
+            'poll_id'=> $option->poll_id,
+            'user_id'=> 1,
+        ]);
+        $vote->save();
         Option::find($option_id)->increment('votes_count');
         // $polls = Poll::where( 'status','STARTED')->with('options')->get();
         // if($selectedOption) {

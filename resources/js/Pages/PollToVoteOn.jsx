@@ -50,10 +50,10 @@ const svgs = [
 // let sentData = [];
 
 export default function PollToVoteOn(props) {
-    const { poll, votingClient } = props;
+    const { poll, votingClient, votingDate } = props;
 
-    console.log(poll);
-    console.log(votingClient);
+    // console.log(poll);
+    // console.log(votingClient);
     const { options } = poll[0];
     // console.log(options[0]);
 
@@ -64,11 +64,11 @@ export default function PollToVoteOn(props) {
     const [totalSent, setTotalSent] = useState(0);
 
     function vote(option_id, poll_id, option_name) {
-        console.log("option_id, poll_id");
+        // console.log("option_id, poll_id");
 
-        console.log(option_id, poll_id);
-        console.log("option_name");
-        console.log(option_name);
+        // console.log(option_id, poll_id);
+        // console.log("option_name");
+        // console.log(option_name);
         setVotedOption(option_name);
         //  async function fetchData() {
         //   try {
@@ -88,7 +88,8 @@ export default function PollToVoteOn(props) {
                 {
                     option: option_id,
                     poll: poll_id,
-                    voting_client: 555,
+                    voting_client: votingClient,
+                    voting_date: votingDate,
                 },
             ])
             .then(function (response) {
