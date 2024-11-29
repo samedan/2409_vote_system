@@ -68,3 +68,9 @@
 > PollToVoteOn.jsx -> child
 
 > Copy public 'build' folder in the backend folder
+
+### //////////////////////////////////
+
+### Charts
+
+> https://blog.logrocket.com/using-chart-js-react/

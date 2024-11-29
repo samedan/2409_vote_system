@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GraphController;
 use App\Http\Controllers\PollController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -63,6 +64,11 @@ Route::prefix('poll')->middleware('auth')->group(function() {
 
     Route::get('/{poll}', [PollController::class, 'show'])->name('poll.show');
     Route::post('/{poll}/vote', [PollController::class, 'vote'])->name('poll.vote');
+});
+// GRAPHS
+Route::prefix('graphs')->middleware('auth')->group(function() {
+    Route::get('/', [GraphController::class, 'index']);
+    Route::get('/chart', [GraphController::class, 'chart'])->name('chart.show');
 });
 
 require __DIR__.'/auth.php';
