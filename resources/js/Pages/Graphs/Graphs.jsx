@@ -9,7 +9,9 @@ import LineChart from "@/utils/LineChart";
 
 Chart.register(CategoryScale);
 
-export default function Graphs() {
+export default function Graphs({ votes }) {
+    console.log(votes);
+
     const [chartData, setChartData] = useState({
         labels: Data.map((data) => data.year),
         datasets: [
@@ -41,7 +43,7 @@ export default function Graphs() {
                         <div className="flex h-screen_ col-span-2">
                             <div className="m-auto items-center justify-center ml-2">
                                 <p>Using Chart.js in React</p>
-                                <Pie
+                                {/* <Pie
                                     data={chartData}
                                     options={{
                                         plugins: {
@@ -51,8 +53,9 @@ export default function Graphs() {
                                             },
                                         },
                                     }}
-                                />
+                                /> */}
                                 <LineChart chartData={chartData} />
+                                {/* <LineChart chartData={chartData} /> */}
                             </div>
                         </div>
                     </div>
