@@ -70,6 +70,7 @@ Route::prefix('graphs')->middleware('auth')->group(function() {
     Route::get('/', [GraphController::class, 'index']);
     // Route::get('/chart', [GraphController::class, 'chart'])->name('chart.show');
     Route::get('/all-votes', [GraphController::class, 'allVotes'])->name('all-votes');
+    Route::get('/all-polls', [GraphController::class, 'allPolls']);
 
 });
 

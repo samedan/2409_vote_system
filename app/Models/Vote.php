@@ -19,4 +19,9 @@ class Vote extends Model
         $count = Vote::all()->count();
         return $count;
     }
+
+    public function allPolls() {
+        $allPolls = Poll::all();
+        return $allPolls;
+    }
 }

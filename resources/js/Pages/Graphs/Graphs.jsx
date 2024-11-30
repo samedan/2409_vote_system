@@ -6,11 +6,65 @@ import { Data } from "../../utils/Data";
 // import "./styles.css";
 import { Pie } from "react-chartjs-2";
 import LineChart from "@/utils/LineChart";
+import { useEffect } from "react";
 
 Chart.register(CategoryScale);
 
-export default function Graphs({ votes }) {
-    console.log(votes);
+export default function Graphs({ votes, polls }) {
+    const [title, setTitle] = useState("");
+
+    // console.log("votes", votes);
+    // console.log("polls", polls);
+    console.log("title");
+    console.log(title);
+
+    // getAllPolls Number
+    function getAllPolls() {
+        const allPolls = [];
+        if (votes) {
+            votes.map((vote) => {
+                // console.log(vote.poll_id);
+                if (!allPolls.includes(vote.poll_id)) {
+                    allPolls.push(vote.poll_id);
+                }
+            });
+        }
+        return allPolls;
+    }
+
+    // get one Poll all Data
+    function getOnePollAllData(x) {
+        let onePollData = [];
+        onePollData = votes.filter((vote) => {
+            return vote.poll_id == x;
+        });
+
+        // setTitle(onePollData.)
+        return onePollData;
+    }
+
+    // return Poll Title & Stuff
+    function getPollTitle(x) {
+        let titleOfPoll = polls.filter((poll) => poll.id == x);
+
+        return titleOfPoll.title;
+    }
+
+    useEffect(() => {
+        // console.log("allPolls");
+
+        // console.log(getAllPolls());
+
+        console.log("getOnePollAllData(8)");
+        getOnePollAllData(8);
+        getPollTitle(8);
+    }, []);
+    useEffect(() => {
+        // console.log("allPolls");
+
+        // console.log(getAllPolls());
+        setTitle(getPollTitle(8));
+    }, [title]);
 
     const [chartData, setChartData] = useState({
         labels: Data.map((data) => data.year),
@@ -54,7 +108,12 @@ export default function Graphs({ votes }) {
                                         },
                                     }}
                                 /> */}
-                                <LineChart chartData={chartData} />
+                                {title !== "" && (
+                                    <LineChart
+                                        chartData={chartData}
+                                        titleReceived={title}
+                                    />
+                                )}
                                 {/* <LineChart chartData={chartData} /> */}
                             </div>
                         </div>
