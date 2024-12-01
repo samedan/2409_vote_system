@@ -1,8 +1,13 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
-function LineChart({ chartData, titleReceived }) {
-    console.log("title in Line Chart");
-    console.log(titleReceived);
+function LineChart({ chartData, titleReceived, votes, polls }) {
+    // console.log("title in Line Chart");
+    // console.log(titleReceived);
+    // console.log(chartData);
+    // console.log(votes);
+    // console.log(polls);
+
+    // chartData['labels'] =
 
     return (
         <div className="chart-container">

@@ -15,8 +15,6 @@ export default function Graphs({ votes, polls }) {
 
     // console.log("votes", votes);
     // console.log("polls", polls);
-    console.log("title");
-    console.log(title);
 
     // getAllPolls Number
     function getAllPolls() {
@@ -43,6 +41,130 @@ export default function Graphs({ votes, polls }) {
         return onePollData;
     }
 
+    function getDaysCountAndData() {
+        let data = [];
+        let dataFinal = [];
+        let labels = [];
+        votes.map((vote) => {
+            if (!data.includes(vote.created_at.substring(0, 10))) {
+                // data.push(vote.created_at.substring(0, 9));
+                if (!labels.includes(vote.created_at.substring(0, 10))) {
+                    labels.push(vote.created_at.substring(0, 10));
+                }
+            }
+            // data.push(vote.created_at);
+        });
+        let i = 0;
+        let j = 0;
+        console.log(votes.length);
+        console.log(labels.length);
+
+        var obj2 = {};
+
+        while (j < labels.length) {
+            console.log("j", j);
+
+            var name2 = j;
+            obj2[labels[j]] = {};
+
+            data.push(labels[j]);
+            // console.log(data[j]); // Calendar days
+
+            // OBJECT
+            var obj = {};
+            var name = "name";
+            var val = 2;
+            obj[name] = val;
+            // console.log(obj);
+            // END OBJECT
+
+            let pollsAndOptions = [];
+            let pollsAndOptionsObject = {};
+            // pollsAndOptions.push("date", labels[j], []);
+            // console.log(pollsAndOptions[labels[j]]);
+
+            // while (i < votes.length) {
+            // for (i = 0; i <= votes.length; i++) {
+            //     // console.log("i", votes[i].created_at.substring(0, 10));
+            //     // if (votes[i].created_at.substring(0, 10) == "2024-10-22") {
+            //     // console.log("data[j]");
+            //     // console.log(data[j]);
+            //     // console.log(votes[i]);
+
+            //     if (votes[i].created_at.substring(0, 10) === data[j]) {
+            //         if (
+            //             !data[j].includes(votes[i].created_at.substring(0, 10))
+            //         ) {
+            //             // console.log(votes[i].created_at.substring(0, 9));
+
+            //             // pollsAndOptions.push({
+            //             //     poll_id: votes[i].poll_id,
+            //             //     option_id: votes[i].option_id,
+            //             // });
+            //             pollsAndOptions.push({
+            //                 poll_id: 1,
+            //                 option_id: 2,
+            //             });
+            //         }
+            //         // }
+            //     }
+
+            //     i++;
+            //     obj2[data[j]] = pollsAndOptions;
+            //     pollsAndOptions = [];
+            //     // data[j] = [data[j], [pollsAndOptions]];
+            // }
+            // obj2[data[j]] = pollsAndOptions;
+            // obj2[labels[j]] = pollsAndOptions;
+            // console.log(pollsAndOptions);
+            // data[j].push(pollsAndOptions);
+            // console.log(data[j]);
+            dataFinal.push([data[j]]);
+
+            // obj2[data[j]] = pollsAndOptions;
+            j++;
+        }
+        // console.log(dataFinal);
+
+        let finalObject = {};
+        for (const key of Object.entries(obj2)) {
+            finalObject[key] = getDataFromEachDay(key);
+            // console.log(getDataFromEachDay(key));
+
+            // console.log(`${key}: ${value}`);
+        }
+        console.log(finalObject);
+        // console.log(obj2);
+    }
+
+    // get Each day with its votes
+    const getDataFromEachDay = (dayDate) => {
+        console.log(dayDate[0]);
+
+        let arrayEachDay = [];
+        votes.map((vote) => {
+            if (vote.created_at.substring(0, 10) === dayDate[0]) {
+                console.log("yes");
+
+                arrayEachDay.push([vote.poll_id, vote.option_id]);
+            }
+            // }
+        });
+        return countDuplicatesInArray(arrayEachDay);
+        // return arrayEachDay;
+    };
+
+    // count number of duplicates in one day
+    const countDuplicatesInArray = (arrayEachDay) => {
+        const counts = {};
+        // const sampleArray = ['a', 'a', 'b', 'c'];
+        arrayEachDay.forEach(function (x) {
+            counts[x] = (counts[x] || 0) + 1;
+        });
+        // console.log(counts);
+        return counts;
+    };
+
     // return Poll Title & Stuff
     function getPollTitle(x) {
         let titleOfPoll = polls.filter((poll) => poll.id == x);
@@ -54,11 +176,12 @@ export default function Graphs({ votes, polls }) {
         // console.log("allPolls");
 
         // console.log(getAllPolls());
-
+        getDaysCountAndData();
         console.log("getOnePollAllData(8)");
         getOnePollAllData(8);
         getPollTitle(8);
     }, []);
+
     useEffect(() => {
         // console.log("allPolls");
 
@@ -112,6 +235,8 @@ export default function Graphs({ votes, polls }) {
                                     <LineChart
                                         chartData={chartData}
                                         titleReceived={title}
+                                        votes={votes}
+                                        polls={polls}
                                     />
                                 )}
                                 {/* <LineChart chartData={chartData} /> */}
