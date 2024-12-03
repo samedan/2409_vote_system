@@ -26,7 +26,7 @@ export default function Authenticated({ user, header, children }) {
                                     href={route("dashboard")}
                                     active={route().current("dashboard")}
                                 >
-                                    Dashboard
+                                    Avis client Pharmacie
                                 </NavLink>
                             </div>
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -34,7 +34,7 @@ export default function Authenticated({ user, header, children }) {
                                     href={route("poll.create")}
                                     active={route().current("poll.create")}
                                 >
-                                    Create Poll X
+                                    Ajouter une question
                                 </NavLink>
                             </div>
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -42,7 +42,20 @@ export default function Authenticated({ user, header, children }) {
                                     href={route("poll.index")}
                                     active={route().current("poll.index")}
                                 >
-                                    See All Polls
+                                    Voir les questions
+                                </NavLink>
+                            </div>
+                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink
+                                    // href={route("poll.index")}
+                                    href={"/graphs/all-votes"}
+                                    // active={route().current("poll.index")}
+                                    style={{
+                                        color: "green",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    Voir les Résultats
                                 </NavLink>
                             </div>
                         </div>

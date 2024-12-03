@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Option;
 use App\Models\Poll;
 use App\Models\Vote;
 use Carbon\Carbon;
@@ -61,8 +62,10 @@ class GraphController extends Controller
             $polls = Poll::all();
             $data['polls'] = $polls;
             $data['votes'] = $votes;
+            $options = Option::all();
+            
         
-        return Inertia::render('Graphs/Graphs'
+        return Inertia::render('Graphs/BeforeGraphs'
         // ,[
             
         //     'polls' => $polls,
@@ -72,13 +75,17 @@ class GraphController extends Controller
             
         
         )->with([ 'polls' => $polls,
-             'votes' => $votes]); 
+             'votes' => $votes,
+             'options' => $options,
+            ]); 
     }
 
     public function allPolls () {
-        $polls = Poll::all();
+        $polls = Poll::all();       
         $votes = Vote::orderBy("created_at", "desc")->get()->all();
-        return ['polls' => $polls,
-            'votes' => $votes ];
+        return [
+            'polls' => $polls,
+            'votes' => $votes,            
+        ];
     }
 }

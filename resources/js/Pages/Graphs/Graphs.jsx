@@ -6,13 +6,19 @@ import { Data } from "../../utils/Data";
 // import "./styles.css";
 import { Pie } from "react-chartjs-2";
 import LineChart from "@/utils/LineChart";
+import LineChartOnePoll from "@/utils/LineChartOnePoll";
 import { useEffect } from "react";
 
 Chart.register(CategoryScale);
 
-export default function Graphs({ votes, polls }) {
+export default function Graphs({ votes, polls, options, selectedPoll }) {
     const [title, setTitle] = useState("");
+    const [votesSent, setVotesSent] = useState();
+    // const [selectedPoll, setSelectedPoll] = useState(selectedPollId);
+    const [receivedPolls, setPollReceived] = useState(polls);
+    const [loading, setLoading] = useState(false);
 
+    console.log("selectedPoll on Grapnhs", selectedPoll);
     // console.log("votes", votes);
     // console.log("polls", polls);
 
@@ -56,13 +62,13 @@ export default function Graphs({ votes, polls }) {
         });
         let i = 0;
         let j = 0;
-        console.log(votes.length);
-        console.log(labels.length);
+        // console.log(votes.length);
+        // console.log(labels.length);
 
         var obj2 = {};
 
         while (j < labels.length) {
-            console.log("j", j);
+            // console.log("j", j);
 
             var name2 = j;
             obj2[labels[j]] = {};
@@ -71,15 +77,13 @@ export default function Graphs({ votes, polls }) {
             // console.log(data[j]); // Calendar days
 
             // OBJECT
-            var obj = {};
-            var name = "name";
-            var val = 2;
-            obj[name] = val;
+            // var obj = {};
+            // var name = "name";
+            // var val = 2;
+            // obj[name] = val;
             // console.log(obj);
             // END OBJECT
 
-            let pollsAndOptions = [];
-            let pollsAndOptionsObject = {};
             // pollsAndOptions.push("date", labels[j], []);
             // console.log(pollsAndOptions[labels[j]]);
 
@@ -133,18 +137,19 @@ export default function Graphs({ votes, polls }) {
 
             // console.log(`${key}: ${value}`);
         }
-        console.log(finalObject);
+        // console.log(finalObject);
         // console.log(obj2);
+        setVotesSent(finalObject);
     }
 
     // get Each day with its votes
     const getDataFromEachDay = (dayDate) => {
-        console.log(dayDate[0]);
+        // console.log(dayDate[0]);
 
         let arrayEachDay = [];
         votes.map((vote) => {
             if (vote.created_at.substring(0, 10) === dayDate[0]) {
-                console.log("yes");
+                // console.log("yes");
 
                 arrayEachDay.push([vote.poll_id, vote.option_id]);
             }
@@ -166,38 +171,116 @@ export default function Graphs({ votes, polls }) {
     };
 
     // return Poll Title & Stuff
-    function getPollTitle(x) {
-        let titleOfPoll = polls.filter((poll) => poll.id == x);
+    function getPollTitle(selectedPoll) {
+        let titleOfPoll = polls.filter((poll) => poll.id == selectedPoll);
 
         return titleOfPoll.title;
     }
+
+    // Transform in numbers
+    const setVotesInNumbers = (options, selectedPoll) => {
+        console.log(receivedPolls);
+        console.log("selectedPoll");
+        console.log(selectedPoll);
+
+        let noteEachVote = [];
+        let noteValue = {
+            Satisfait: 4,
+            "Plutôt Satisfait": 3,
+            "Plutôt Insatisfait": 2,
+            Insatisfait: 1,
+        };
+
+        // const pollsIds = {
+        //     { "idPoll": 7, id: 5 },
+        //     { idPoll: 5, id: 3 },
+        //     { idPoll: 5, id: 4 },
+        //     { idPoll: 8, id: 6 },
+        // };
+
+        for (const [key, value] of Object.entries(polls)) {
+            // console.log(`${value["id"]}`);
+            if (value["id"] === selectedPoll) {
+                console.log("value");
+                console.log(value);
+            }
+            // console.log(`${key}: ${value}`);
+        }
+        // setLoading(true);
+        let foundPoll = polls.find((element) => element.id == selectedPoll);
+        console.log("foundPoll");
+        console.log(foundPoll);
+
+        if (foundPoll) {
+            console.log("if foundPoll");
+            console.log(foundPoll);
+            options.map((option) => {
+                // console.log("[option.poll_id]");
+                // console.log(option.poll_id);
+                // console.log("selectedPoll");
+                // console.log(selectedPoll);
+                if (option.poll_id == selectedPoll) {
+                    // console.log("true found");
+                    // console.log(option.votes_count);
+                    noteEachVote.push({
+                        poll_name: foundPoll.title,
+                        content: option.content,
+                        // note: noteValue[option.content],
+                        vote_count: option.votes_count,
+                        // value_vote_count:
+                        //     option.votes_count * noteValue[option.content],
+                        poll_id: option.poll_id,
+                    });
+                }
+            });
+            // console.log("noteEachVote");
+            // console.log(noteEachVote);
+        } else {
+            console.log("loading");
+        }
+
+        return noteEachVote;
+    };
+
+    // setVotesInNumbers(options, 8);
+
+    useEffect(() => {
+        // console.log("allPolls");
+
+        console.log("selectedPoll on useEffect");
+        console.log(selectedPoll);
+
+        setVotesInNumbers(options, selectedPoll);
+    }, [selectedPoll]);
 
     useEffect(() => {
         // console.log("allPolls");
 
         // console.log(getAllPolls());
         getDaysCountAndData();
-        console.log("getOnePollAllData(8)");
-        getOnePollAllData(8);
-        getPollTitle(8);
+        // console.log("getOnePollAllData(8)");
+        getOnePollAllData(selectedPoll);
+        getPollTitle(selectedPoll);
+        setTitle(getPollTitle(selectedPoll));
     }, []);
 
-    useEffect(() => {
-        // console.log("allPolls");
+    // useEffect(() => {
+    //     // console.log("allPolls");
 
-        // console.log(getAllPolls());
-        setTitle(getPollTitle(8));
-    }, [title]);
+    //     // console.log(getAllPolls());
+    //     setTitle(getPollTitle(selectedPoll));
+    // }, [title]);
 
     const [chartData, setChartData] = useState({
-        labels: Data.map((data) => data.year),
+        // labels: Data.map((data) => data.year),
+        labels: [],
         datasets: [
             {
-                label: "Users Gained ",
+                label: "Initial data",
                 data: Data.map((data) => data.userGain),
                 backgroundColor: [
                     "rgba(75,192,192,1)",
-                    // &quot;#ecf0f1",
+                    "#ecf0f1",
                     "#50AF95",
                     "#f3ba2f",
                     "#2a71d0",
@@ -207,19 +290,40 @@ export default function Graphs({ votes, polls }) {
             },
         ],
     });
+
     return (
         <>
             {/* <Head title="All Polls" /> */}
             {/* {JSON.stringify(polls)} */}
+            {/* <div className="max-w-[1110px]  bg-white border-red-300 rounded-2xl overflow-y-auto">
+                {selectedPoll}
+                <form method="post">
+                    <select
+                        onChange={(e) => setSelectedPoll(e.target.value)}
+                        value={selectedPoll}
+                    >
+                        <option value={7}>
+                            L'écoute de la part du professionnel de santé
+                        </option>
+                        <option value={8}>
+                            Les explications fournies autour de votre traitement
+                        </option>
+                        <option value={5}>Le délai d'attente</option>
+                        <option value={6}>L'accueil par notre équipe</option>
+                    </select>
+                </form>
+            </div> */}
+
             <div
                 className=" w-full flex  h-screen pt-2 justify-center items-center_"
-                style={{ height: "100vh !important" }}
+                // style={{ height: "100vh !important" }}
             >
-                <div className="max-w-[1110px] max-h-[540px] bg-white border-red-300 rounded-2xl overflow-y-auto">
-                    <div className="py-1 grid grid-cols-12 max-h-[540px] max-w-[1110px]">
+                <div className="max-w-[1110px]  bg-white border-red-300 rounded-2xl overflow-y-auto">
+                    {/* <div className="py-1 grid grid-cols-12 max-h-[540px] max-w-[1110px]"> */}
+                    <div className="py-1 grid grid-cols-12  max-w-[1110px]">
                         <div className="flex h-screen_ col-span-2">
                             <div className="m-auto items-center justify-center ml-2">
-                                <p>Using Chart.js in React</p>
+                                {/* <p>Using Chart.js in React</p> */}
                                 {/* <Pie
                                     data={chartData}
                                     options={{
@@ -231,14 +335,49 @@ export default function Graphs({ votes, polls }) {
                                         },
                                     }}
                                 /> */}
-                                {title !== "" && (
+                                {/* {title !== "" && (
                                     <LineChart
                                         chartData={chartData}
                                         titleReceived={title}
                                         votes={votes}
                                         polls={polls}
+                                        votesSent={votesSent}
+                                        options={options}
                                     />
-                                )}
+                                )} */}
+                                {/* <LineChart chartData={chartData} /> */}
+                            </div>
+                            <div className="m-auto items-center justify-center ml-2">
+                                {/* <p>Poll id = 8</p> */}
+                                {/* <Pie
+                                    data={chartData}
+                                    options={{
+                                        plugins: {
+                                            title: {
+                                                display: true,
+                                                text: "Users Gained between 2016-2020",
+                                            },
+                                        },
+                                    }}
+                                /> */}
+
+                                {
+                                    <LineChartOnePoll
+                                        // chartData={chartData}
+                                        chartData={chartData}
+                                        allVotesOnPoll={setVotesInNumbers(
+                                            options,
+                                            selectedPoll
+                                        )}
+                                        titleReceived={title}
+                                        votes={votes}
+                                        polls={polls}
+                                        votesSent={votesSent}
+                                        options={options}
+                                        selectedPoll={selectedPoll}
+                                    />
+                                }
+
                                 {/* <LineChart chartData={chartData} /> */}
                             </div>
                         </div>
